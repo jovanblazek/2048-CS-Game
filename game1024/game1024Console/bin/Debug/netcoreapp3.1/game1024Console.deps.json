@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "game1024Console/1.0.0": {
+        "dependencies": {
+          "game1024Core": "1.0.0"
+        },
+        "runtime": {
+          "game1024Console.dll": {}
+        }
+      },
+      "game1024Core/1.0.0": {
+        "runtime": {
+          "game1024Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "game1024Console/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "game1024Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

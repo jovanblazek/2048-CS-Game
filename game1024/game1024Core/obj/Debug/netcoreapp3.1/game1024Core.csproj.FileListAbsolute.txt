@@ -1,0 +1,9 @@
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\bin\Debug\netcoreapp3.1\game1024Core.deps.json
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\bin\Debug\netcoreapp3.1\game1024Core.dll
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\bin\Debug\netcoreapp3.1\game1024Core.pdb
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.csprojAssemblyReference.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.AssemblyInfoInputs.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.AssemblyInfo.cs
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.csproj.CoreCompileInputs.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.dll
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Core\obj\Debug\netcoreapp3.1\game1024Core.pdb

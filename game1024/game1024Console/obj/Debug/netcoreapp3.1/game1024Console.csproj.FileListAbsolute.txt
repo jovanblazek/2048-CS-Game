@@ -1,0 +1,16 @@
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.exe
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.deps.json
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.runtimeconfig.json
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.runtimeconfig.dev.json
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.dll
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Console.pdb
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Core.dll
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\bin\Debug\netcoreapp3.1\game1024Core.pdb
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.csprojAssemblyReference.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.AssemblyInfoInputs.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.AssemblyInfo.cs
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.csproj.CoreCompileInputs.cache
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.csproj.CopyComplete
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.dll
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.pdb
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Console\obj\Debug\netcoreapp3.1\game1024Console.genruntimeconfig.cache
