@@ -11,6 +11,6 @@ namespace game1024Core.Core
             Value = value;
         }
 
-        public int Value { get; }
+        public int Value { get; set; }
     }
 }

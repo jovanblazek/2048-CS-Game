@@ -10,6 +10,10 @@ namespace game1024Console
             var field = new Field(4, 4);
             var ui = new ConsoleUI(field);
             ui.PrintField();
+            Console.WriteLine("\n");
+            field.Move(Direction.Down);
+            ui.PrintField();
+
         }
     }
 }
