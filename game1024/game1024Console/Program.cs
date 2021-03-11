@@ -7,11 +7,16 @@ namespace game1024Console
     {
         static void Main(string[] args)
         {
-            var field = new Field(4, 4);
-            var ui = new ConsoleUI(field);
+            var game = new Game(4);
+            var ui = new ConsoleUI(game);
             ui.PrintField();
+
             Console.WriteLine("\n");
-            field.Move(Direction.Down);
+            game.Update(Direction.Left);
+            ui.PrintField();
+            
+            Console.WriteLine("\n");
+            game.Update(Direction.Up);
             ui.PrintField();
 
         }

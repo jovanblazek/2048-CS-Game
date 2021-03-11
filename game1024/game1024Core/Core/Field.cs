@@ -12,6 +12,10 @@ namespace game1024Core.Core
     public class Field
     {
         private Tile[,] tiles;
+        public bool didSomething = false;
+        private bool hasMovedSomething = false;
+        private int foundRow = 0;
+        private int foundColumn = 0;
         private Random rnd = new Random();
 
         public int RowCount { get; }
@@ -28,16 +32,15 @@ namespace game1024Core.Core
         /* Initialize the game, spawn first two tiles */
         private void Initialize()
         {
-            //CreateNewTile();
-            //CreateNewTile();
-            for (int i = 0; i < 10; i++)
-            {
-                CreateNewTile();
-            }
+            CreateNewTile();
+            CreateNewTile();
+
+            //for (int i = 0; i < 10; i++)
+              //  CreateNewTile();
         }
 
         /* Create a new tile and place it into random empty place in field */
-        private void CreateNewTile()
+        public void CreateNewTile()
         {
             //if empty space then continue
             //pick random empty spot
@@ -71,21 +74,13 @@ namespace game1024Core.Core
             return false;
         }
 
-        private bool IsMovePossible()
+        public bool IsMovePossible()
         {
-            if (HasEmptyTile())
-                return true;
-
-            //check tile to the right
-            for (int i = 0; i < RowCount; i++)
-                for (int j = 0; j < ColumnCount-1; j++)
-                    if (tiles[i, j] == tiles[i, j + 1])
-                            return true;
-
-            //check tile to the left
-            for (int i = 0; i < RowCount-1; i++)
-                for (int j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j] == tiles[i + 1, j])
+            for (int row = 0; row < RowCount; row++)
+                for (int column = 0; column < ColumnCount; column++)
+                    if (tiles[row, column] == null ||
+                        (tiles[row, column] == tiles[row, column + 1] && column < ColumnCount - 1) ||
+                        (tiles[row, column] == tiles[row + 1, column] && row < RowCount - 1))
                         return true;
 
             return false;
@@ -96,162 +91,223 @@ namespace game1024Core.Core
             return tiles[row, column];
         }
 
-        public bool MoveAndMerge(int id, int iterator, Direction direction)
+
+
+        /* VERTICAL */
+
+        private bool MergeColumn(int row, int column, bool hasFirstTile)
         {
-            Console.WriteLine("\n");
-            if (direction == Direction.Down || direction == Direction.Right)
+            this.foundColumn = column;
+
+            if (!hasFirstTile && tiles[row, column] != null) //prvy tile
             {
-                /*
-                for (int i = iterator-1; i > 0; i--)    // i = 3,2,1
+                this.foundRow = row;
+                hasFirstTile = true;
+            }
+            else if (hasFirstTile && tiles[row, column] != null) //druhy tile
+            {
+                if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
                 {
-                    //Console.WriteLine("{0} i= {1} id= {2}", tiles[i, id].Value, i, id); //move down
-                    Console.WriteLine("{0} i= {1} id= {2}", tiles[id, i].Value, i, id); //move right
-                }*/
+                    tiles[this.foundRow, this.foundColumn].Value *= 2;
+                    tiles[row, column] = null;
+                    hasFirstTile = false;
+                    this.didSomething = true;
+                }
+                else
+                {
+                    this.foundRow = row;
+                    hasFirstTile = true;
+                }
+            }
+
+            return hasFirstTile;
+        }
+
+        private bool MoveColumn(int row, int column, bool hasFirstTile)
+        {
+            this.foundColumn = column;
+            if (!hasFirstTile && tiles[row, column] == null)
+            {
+                hasFirstTile = true;
+                this.foundRow = row;
+            }
+            else if (hasFirstTile && tiles[row, column] != null)
+            {
+                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value);
+                tiles[row, column] = null;
+                this.hasMovedSomething = true;
+                hasFirstTile = false;
+                this.didSomething = true;
+            }
+
+            return hasFirstTile;
+        }
+
+        private void MoveVertical(int column, Direction direction)
+        {
+            bool hasFirstTile = false;
+            if (direction == Direction.Down)
+            {
+                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
+                    hasFirstTile = MergeColumn(row, column, hasFirstTile);
+
+                    hasFirstTile = false;
+
+                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
+                {
+                    hasFirstTile = MoveColumn(row, column, hasFirstTile);
+                    if (this.hasMovedSomething)
+                        row = this.foundRow;
+                    this.hasMovedSomething = false;
+                }
             }
             else
             {
-                for (int i = iterator; i < ColumnCount; i++)
+                for (int row = 0; row < RowCount; row++) //0,1,2,3
+                    hasFirstTile = MergeColumn(row, column, hasFirstTile);
+
+                hasFirstTile = false;
+
+                for (int row = 0; row < RowCount; row++) //0,1,2,3
                 {
-                    Console.WriteLine(" {0}", tiles[i, id].Value); //move up
-                    //Console.WriteLine(" {0}", tiles[id, i].Value); //move left
+                    hasFirstTile = MoveColumn(row, column, hasFirstTile);
+                    if (this.hasMovedSomething)
+                        row = this.foundRow;
+                    this.hasMovedSomething = false;
                 }
             }
-            
-
-            return false;
         }
+
+
+
+        /* HORIZONTAL */
+        private bool MergeRow(int row, int column, bool hasFirstTile)
+        {
+            this.foundRow = row;
+
+            if (!hasFirstTile && tiles[row, column] != null) //prvy tile
+            {
+                this.foundColumn = column;
+                hasFirstTile = true;
+            }
+            else if (hasFirstTile && tiles[row, column] != null) //druhy tile
+            {
+                if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
+                {
+                    tiles[this.foundRow, this.foundColumn].Value *= 2;
+                    tiles[row, column] = null;
+                    hasFirstTile = false;
+                    this.didSomething = true;
+                }
+                else
+                {
+                    this.foundColumn = column;
+                    hasFirstTile = true;
+                }
+            }
+
+            return hasFirstTile;
+        }
+
+        private bool MoveRow(int row, int column, bool hasFirstTile)
+        {
+            this.foundRow = row;
+
+            if (!hasFirstTile && tiles[row, column] == null)
+            {
+                hasFirstTile = true;
+                this.foundColumn = column;
+            }
+            else if (hasFirstTile && tiles[row, column] != null)
+            {
+                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value);
+                tiles[row, column] = null;
+                this.hasMovedSomething = true;
+                hasFirstTile = false;
+                this.didSomething = true;
+            }
+
+            return hasFirstTile;
+        }
+
+        private void MoveHorizontal(int row, Direction direction)
+        {
+            bool hasFirstTile = false;
+            if (direction == Direction.Right)
+            {
+                for (int column = ColumnCount - 1; column >= 0 ; column--) //3,2,1,0
+                    hasFirstTile = MergeRow(row, column, hasFirstTile);
+
+                hasFirstTile = false;
+
+                for (int column = ColumnCount - 1; column >= 0; column--) //3,2,1,0
+                {
+                    hasFirstTile = MoveRow(row, column, hasFirstTile);
+                    if (this.hasMovedSomething)
+                        column = this.foundColumn;
+                    this.hasMovedSomething = false;
+                }
+            }
+            else
+            {
+                for (int column = 0; column < ColumnCount; column++)    //0,1,2,3
+                    hasFirstTile = MergeRow(row, column, hasFirstTile);
+
+                hasFirstTile = false;
+
+                for (int column = 0; column < ColumnCount; column++)    //0,1,2,3
+                {
+                    hasFirstTile = MoveRow(row, column, hasFirstTile);
+                    if (this.hasMovedSomething)
+                        column = this.foundColumn;
+                    this.hasMovedSomething = false;
+                }
+            }
+        }
+
+
 
         public void Move(Direction direction)
         {
-            /*if (!IsMovePossible())
-                return;*/
+            if (!IsMovePossible())
+                return;
 
             int startingRow = 0, startingColumn = 0;
+
             switch (direction)
             {
                 case Direction.Up:
                     startingRow = 0;
                     startingColumn = 0;
+
+                    for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
+                        MoveVertical(column, Direction.Up);
+
                     break;
                 case Direction.Down:
                     startingRow = RowCount;
                     startingColumn = 0;
+
+                    for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
+                        MoveVertical(column, Direction.Down);
+
                     break;
                 case Direction.Left:
                     startingRow = 0;
                     startingColumn = 0;
+
+                    for (int row = startingRow; row < RowCount; row++)
+                        MoveHorizontal(row, Direction.Left);
+
                     break;
                 case Direction.Right:
                     startingRow = 0;
                     startingColumn = ColumnCount;
+
+                    for (int row = startingRow; row < RowCount; row++)
+                        MoveHorizontal(row, Direction.Right);
+
                     break;
-            }
-
-            if (false)
-            {
-                /*
-                if (direction == Direction.Up || direction == Direction.Down)
-                {
-                    for (int i = startingColumn; i < ColumnCount; i++)
-                    {
-                        //MoveAndMerge(i, startingRow, direction);
-                        if (direction == Direction.Down)
-                        {
-                            for (int j = startingRow - 1; j > 0; j--)    // i = 3,2,1
-                            {
-                                if (tiles[j, i] != null && tiles[j - 1, i] != null && (tiles[j, i].Value == tiles[j - 1, i].Value))
-                                {
-                                    tiles[j, i].Value *= 2;
-                                    tiles[j - 1, i] = null;
-                                }
-                                //Console.WriteLine("{0} i= {1} id= {2}", tiles[i, id].Value, i, id); //move down
-                            }
-                        }
-                        else
-                        {
-                            for (int j = startingRow; j < RowCount-1; j++)    // i = 0,1,2
-                            {
-                                if (tiles[j, i] != null && tiles[j + 1, i] != null && (tiles[j, i].Value == tiles[j + 1, i].Value))
-                                {
-                                    tiles[j, i].Value *= 2;
-                                    tiles[j + 1, i] = null;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = startingRow; i < RowCount; i++)
-                    {
-                        //MoveAndMerge(i, startingColumn, direction);
-                    }
-                }
-
-            */
-            }
-
-            int firstRow = 0, firstColumn = 0;
-            bool hasFirstTile = false;
-            bool didSomething = false;
-
-            //down
-            for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
-            {
-                firstColumn = column;
-                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
-                {
-                    if (!hasFirstTile && tiles[row, column] != null) //prvy tile
-                    {
-                        firstRow = row;
-                        hasFirstTile = true;
-                    }
-                    else if (hasFirstTile && tiles[row, column] != null) //druhy tile
-                    {
-                        //Console.WriteLine("{0} {1} ?= {2} {3}", row, column, firstRow, firstColumn);
-                        if (tiles[row, column].Value == tiles[firstRow, firstColumn].Value)
-                        {
-                            tiles[firstRow, firstColumn].Value *= 2;
-                            tiles[row, column] = null;
-                            hasFirstTile = false;
-                            didSomething = true;
-                            //Console.WriteLine("{0} {1} ==== {2} {3}", row, column, firstRow, firstColumn);
-                        }
-                        else
-                        {
-                            firstRow = row;
-                            hasFirstTile = true;
-                        }
-                    }
-                }
-
-                hasFirstTile = false; //cleanup kvoli prechodu medzi stlpcami
-            }
-
-            for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
-            {
-                firstColumn = column;
-                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
-                {
-                    //Console.WriteLine("{0} {1}", row, column);
-                    if (!hasFirstTile && tiles[row, column] == null)
-                    {
-                        hasFirstTile = true;
-                        firstRow = row;
-                        //Console.WriteLine("{0} {1} null", row, column);
-                    }
-                    else if (hasFirstTile && tiles[row, column] != null)
-                    {
-                        //Console.WriteLine("{0} {1} <== {2} {3}", firstRow, firstColumn, row, column);
-                        tiles[firstRow, firstColumn] = new Tile(tiles[row, column].Value);
-                        tiles[row, column] = null;
-                        row = firstRow;
-                        hasFirstTile = false;
-                        didSomething = true;
-                    }
-
-                }
-                hasFirstTile = false; //cleanup kvoli prechodu medzi stlpcami
             }
         }
 

@@ -7,11 +7,22 @@ namespace game1024Console
 {
     public class ConsoleUI
     {
+        private Game game;
         private Field field;
 
-        public ConsoleUI(Field field)
+        public ConsoleUI(Game game)
         {
-            this.field = field;
+            this.game = game;
+            field = game.GetField();
+        }
+
+        public void Play()
+        {
+            do
+            {
+                PrintField();
+                //process input
+            } while (game.gameState == GameState.Playing);
         }
 
         public void PrintField()
