@@ -6,13 +6,18 @@ namespace game1024Core.Core
 {
     public enum Direction
     {
-        Up, Down, Left, Right
+        Up,
+        Down,
+        Left,
+        Right
     }
 
     public class Field
     {
         private Tile[,] tiles;
-        public bool didSomething = false;
+        public int Score { get; private set; }
+        public bool DidSomething { get; private set; }
+
         private bool hasMovedSomething = false;
         private int foundRow = 0;
         private int foundColumn = 0;
@@ -26,6 +31,7 @@ namespace game1024Core.Core
             RowCount = rowCount;
             ColumnCount = columnCount;
             tiles = new Tile[rowCount, columnCount];
+            Score = 0;
             Initialize();
         }
 
@@ -36,7 +42,7 @@ namespace game1024Core.Core
             CreateNewTile();
 
             //for (int i = 0; i < 10; i++)
-              //  CreateNewTile();
+            //  CreateNewTile();
         }
 
         /* Create a new tile and place it into random empty place in field */
@@ -58,7 +64,7 @@ namespace game1024Core.Core
                 column = rnd.Next(0, ColumnCount);
             } while (tiles[row, column] != null);
 
-            int value = (rnd.NextDouble() < 1) ? 1 : 2;
+            int value = (rnd.NextDouble() < 0.9) ? 1 : 2;
 
             tiles[row, column] = new Tile(value);
         }
@@ -67,20 +73,28 @@ namespace game1024Core.Core
         private bool HasEmptyTile()
         {
             for (int i = 0; i < RowCount; i++)
-                for (int j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j] == null)
-                        return true;
+            for (int j = 0; j < ColumnCount; j++)
+                if (tiles[i, j] == null)
+                    return true;
 
             return false;
         }
 
         public bool IsMovePossible()
         {
-            for (int row = 0; row < RowCount; row++)
-                for (int column = 0; column < ColumnCount; column++)
-                    if (tiles[row, column] == null ||
-                        (tiles[row, column] == tiles[row, column + 1] && column < ColumnCount - 1) ||
-                        (tiles[row, column] == tiles[row + 1, column] && row < RowCount - 1))
+            if (HasEmptyTile())
+                return true;
+
+            //check tile to the right
+            for (int i = 0; i < RowCount; i++)
+                for (int j = 0; j < ColumnCount - 1; j++)
+                    if (tiles[i, j].Value == tiles[i, j + 1].Value)
+                        return true;
+
+            //check tile below
+            for (int i = 0; i < RowCount - 1; i++)
+                for (int j = 0; j < ColumnCount; j++)
+                    if (tiles[i, j].Value == tiles[i + 1, j].Value)
                         return true;
 
             return false;
@@ -90,7 +104,6 @@ namespace game1024Core.Core
         {
             return tiles[row, column];
         }
-
 
 
         /* VERTICAL */
@@ -110,8 +123,9 @@ namespace game1024Core.Core
                 {
                     tiles[this.foundRow, this.foundColumn].Value *= 2;
                     tiles[row, column] = null;
+                    Score += tiles[this.foundRow, this.foundColumn].Value;
                     hasFirstTile = false;
-                    this.didSomething = true;
+                    this.DidSomething = true;
                 }
                 else
                 {
@@ -137,7 +151,7 @@ namespace game1024Core.Core
                 tiles[row, column] = null;
                 this.hasMovedSomething = true;
                 hasFirstTile = false;
-                this.didSomething = true;
+                this.DidSomething = true;
             }
 
             return hasFirstTile;
@@ -151,7 +165,7 @@ namespace game1024Core.Core
                 for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
                     hasFirstTile = MergeColumn(row, column, hasFirstTile);
 
-                    hasFirstTile = false;
+                hasFirstTile = false;
 
                 for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
                 {
@@ -179,25 +193,25 @@ namespace game1024Core.Core
         }
 
 
-
         /* HORIZONTAL */
         private bool MergeRow(int row, int column, bool hasFirstTile)
         {
             this.foundRow = row;
 
-            if (!hasFirstTile && tiles[row, column] != null) //prvy tile
+            if (!hasFirstTile && tiles[row, column] != null)
             {
                 this.foundColumn = column;
                 hasFirstTile = true;
             }
-            else if (hasFirstTile && tiles[row, column] != null) //druhy tile
+            else if (hasFirstTile && tiles[row, column] != null)
             {
                 if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
                 {
                     tiles[this.foundRow, this.foundColumn].Value *= 2;
                     tiles[row, column] = null;
+                    Score += tiles[this.foundRow, this.foundColumn].Value;
                     hasFirstTile = false;
-                    this.didSomething = true;
+                    this.DidSomething = true;
                 }
                 else
                 {
@@ -224,7 +238,7 @@ namespace game1024Core.Core
                 tiles[row, column] = null;
                 this.hasMovedSomething = true;
                 hasFirstTile = false;
-                this.didSomething = true;
+                this.DidSomething = true;
             }
 
             return hasFirstTile;
@@ -235,7 +249,7 @@ namespace game1024Core.Core
             bool hasFirstTile = false;
             if (direction == Direction.Right)
             {
-                for (int column = ColumnCount - 1; column >= 0 ; column--) //3,2,1,0
+                for (int column = ColumnCount - 1; column >= 0; column--) //3,2,1,0
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
 
                 hasFirstTile = false;
@@ -250,12 +264,12 @@ namespace game1024Core.Core
             }
             else
             {
-                for (int column = 0; column < ColumnCount; column++)    //0,1,2,3
+                for (int column = 0; column < ColumnCount; column++) //0,1,2,3
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
 
                 hasFirstTile = false;
 
-                for (int column = 0; column < ColumnCount; column++)    //0,1,2,3
+                for (int column = 0; column < ColumnCount; column++) //0,1,2,3
                 {
                     hasFirstTile = MoveRow(row, column, hasFirstTile);
                     if (this.hasMovedSomething)
@@ -266,9 +280,9 @@ namespace game1024Core.Core
         }
 
 
-
         public void Move(Direction direction)
         {
+            this.DidSomething = false;
             if (!IsMovePossible())
                 return;
 
@@ -316,10 +330,10 @@ namespace game1024Core.Core
         public bool isSolved()
         {
             for (int i = 0; i < RowCount; i++)
-                for (int j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j] != null && tiles[i,j].Value == 1024)
-                        return true;
-            
+            for (int j = 0; j < ColumnCount; j++)
+                if (tiles[i, j] != null && tiles[i, j].Value == 1024)
+                    return true;
+
             return false;
         }
     }

@@ -12,31 +12,32 @@ namespace game1024Core.Core
     public class Game
     {
         private Field field;
-        public GameState gameState;
+        public GameState GameState { get; private set; }
 
         public Game(int gridSize)
         {
             field = new Field(gridSize, gridSize);
-            gameState = GameState.Playing;
+            GameState = GameState.Playing;
         }
 
         public void Update(Direction direction)
         {
+            field.Move(direction);
+
+            if (field.DidSomething)
+                field.CreateNewTile();
+
             if (field.isSolved())
             {
-                gameState = GameState.Won;
+                GameState = GameState.Won;
                 return;
             }
             else if (!field.IsMovePossible())
             {
-                gameState = GameState.Lost;
+                GameState = GameState.Lost;
                 return;
             }
-
-            field.Move(direction);
-
-            if (field.didSomething)
-                field.CreateNewTile();
+            
         }
 
         public Field GetField()
