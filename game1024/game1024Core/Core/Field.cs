@@ -35,27 +35,27 @@ namespace game1024Core.Core
             Initialize();
         }
 
-        /* Initialize the game, spawn first two tiles */
+        public Tile GetTile(int row, int column)
+        {
+            return tiles[row, column];
+        }
+
+        /// <summary>
+        /// Initialize the game, spawn first two tiles.
+        /// </summary>
         private void Initialize()
         {
             CreateNewTile();
             CreateNewTile();
-
-            //for (int i = 0; i < 10; i++)
-            //  CreateNewTile();
         }
 
-        /* Create a new tile and place it into random empty place in field */
+        /// <summary>
+        /// Create a new tile and place it into random empty place in field.
+        /// </summary>
         public void CreateNewTile()
         {
-            //if empty space then continue
-            //pick random empty spot
-            //pick random value
             if (!HasEmptyTile())
-            {
-                Console.WriteLine("Field.cs - CreateNewTile: No empty tile available");
                 return;
-            }
 
             int row, column;
             do
@@ -64,60 +64,68 @@ namespace game1024Core.Core
                 column = rnd.Next(0, ColumnCount);
             } while (tiles[row, column] != null);
 
-            int value = (rnd.NextDouble() < 0.9) ? 1 : 2;
-
+            var value = (rnd.NextDouble() < 0.9) ? 1 : 2;
             tiles[row, column] = new Tile(value);
         }
 
-        /* Traverse the field and look for empty spaces without tiles => null */
+        /// <summary>
+        /// Traverse the field and look for tiles equal to null - empty spaces.
+        /// </summary>
+        /// <returns>True if found, false otherwise</returns>
         private bool HasEmptyTile()
         {
-            for (int i = 0; i < RowCount; i++)
-            for (int j = 0; j < ColumnCount; j++)
-                if (tiles[i, j] == null)
-                    return true;
+            for (var i = 0; i < RowCount; i++)
+                for (var j = 0; j < ColumnCount; j++)
+                    if (tiles[i, j] == null)
+                        return true;
 
             return false;
         }
 
+        /// <summary>
+        /// Traverse the field and look for adjacent tiles with equal values.
+        /// </summary>
+        /// <returns>True if found, false otherwise</returns>
         public bool IsMovePossible()
         {
             if (HasEmptyTile())
                 return true;
 
             //check tile to the right
-            for (int i = 0; i < RowCount; i++)
-                for (int j = 0; j < ColumnCount - 1; j++)
+            for (var i = 0; i < RowCount; i++)
+                for (var j = 0; j < ColumnCount - 1; j++)
                     if (tiles[i, j].Value == tiles[i, j + 1].Value)
                         return true;
 
             //check tile below
-            for (int i = 0; i < RowCount - 1; i++)
-                for (int j = 0; j < ColumnCount; j++)
+            for (var i = 0; i < RowCount - 1; i++)
+                for (var j = 0; j < ColumnCount; j++)
                     if (tiles[i, j].Value == tiles[i + 1, j].Value)
                         return true;
 
             return false;
         }
 
-        public Tile GetTile(int row, int column)
-        {
-            return tiles[row, column];
-        }
 
+        /* ----------- VERTICAL ----------- */
 
-        /* VERTICAL */
-
+        /// <summary>
+        /// Merge the tiles in column. Has to be called in the for loop iterating rows.
+        /// </summary>
+        /// <param name="row">Current row</param>
+        /// <param name="column">Current column</param>
+        /// <param name="hasFirstTile">True, if the first tile for merging has been found</param>
+        /// <returns>True, if the first tile for merging has been found, false otherwise</returns>
         private bool MergeColumn(int row, int column, bool hasFirstTile)
         {
             this.foundColumn = column;
 
-            if (!hasFirstTile && tiles[row, column] != null) //prvy tile
+            if (!hasFirstTile && tiles[row, column] != null)
             {
                 this.foundRow = row;
                 hasFirstTile = true;
             }
-            else if (hasFirstTile && tiles[row, column] != null) //druhy tile
+            else if (hasFirstTile && tiles[row, column] != null)
             {
                 if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
                 {
@@ -137,6 +145,13 @@ namespace game1024Core.Core
             return hasFirstTile;
         }
 
+        /// <summary>
+        /// Moves the tiles in column. Has to be called in the for loop iterating rows.
+        /// </summary>
+        /// <param name="row">Current row</param>
+        /// <param name="column">Current column</param>
+        /// <param name="hasFirstTile">True, if the first empty tile has been found</param>
+        /// <returns>True, if the first empty tile has been found, false otherwise</returns>
         private bool MoveColumn(int row, int column, bool hasFirstTile)
         {
             this.foundColumn = column;
@@ -157,17 +172,22 @@ namespace game1024Core.Core
             return hasFirstTile;
         }
 
+        /// <summary>
+        /// Merge and move the tiles in the column. Iterates through column and uses helper functions to do the merging and moving.
+        /// </summary>
+        /// <param name="column">Column to merge and move</param>
+        /// <param name="direction">Direction in which to merge and move the column</param>
         private void MoveVertical(int column, Direction direction)
         {
-            bool hasFirstTile = false;
-            if (direction == Direction.Down)
+            var hasFirstTile = false;
+            if (direction == Direction.Down)    //3,2,1,0
             {
-                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
+                for (var row = RowCount - 1; row >= 0; row--)
                     hasFirstTile = MergeColumn(row, column, hasFirstTile);
 
                 hasFirstTile = false;
 
-                for (int row = RowCount - 1; row >= 0; row--) //3,2,1,0
+                for (var row = RowCount - 1; row >= 0; row--)
                 {
                     hasFirstTile = MoveColumn(row, column, hasFirstTile);
                     if (this.hasMovedSomething)
@@ -175,14 +195,14 @@ namespace game1024Core.Core
                     this.hasMovedSomething = false;
                 }
             }
-            else
+            else    //0,1,2,3
             {
-                for (int row = 0; row < RowCount; row++) //0,1,2,3
+                for (var row = 0; row < RowCount; row++)
                     hasFirstTile = MergeColumn(row, column, hasFirstTile);
 
                 hasFirstTile = false;
 
-                for (int row = 0; row < RowCount; row++) //0,1,2,3
+                for (var row = 0; row < RowCount; row++)
                 {
                     hasFirstTile = MoveColumn(row, column, hasFirstTile);
                     if (this.hasMovedSomething)
@@ -193,7 +213,14 @@ namespace game1024Core.Core
         }
 
 
-        /* HORIZONTAL */
+        /* ----------- HORIZONTAL ----------- */
+        /// <summary>
+        /// Merge the tiles in row. Has to be called in the for loop iterating columns.
+        /// </summary>
+        /// <param name="row">Current row</param>
+        /// <param name="column">Current column</param>
+        /// <param name="hasFirstTile">True, if the first tile for merging has been found</param>
+        /// <returns>True, if the first tile for merging has been found, false otherwise</returns>
         private bool MergeRow(int row, int column, bool hasFirstTile)
         {
             this.foundRow = row;
@@ -223,6 +250,13 @@ namespace game1024Core.Core
             return hasFirstTile;
         }
 
+        /// <summary>
+        /// Moves the tiles in row. Has to be called in the for loop iterating columns.
+        /// </summary>
+        /// <param name="row">Current row</param>
+        /// <param name="column">Current column</param>
+        /// <param name="hasFirstTile">True, if the first empty tile has been found</param>
+        /// <returns>True, if the first empty tile has been found, false otherwise</returns>
         private bool MoveRow(int row, int column, bool hasFirstTile)
         {
             this.foundRow = row;
@@ -244,17 +278,22 @@ namespace game1024Core.Core
             return hasFirstTile;
         }
 
+        /// <summary>
+        /// Merge and move the tiles in the row. Iterates through row and uses helper functions to do the merging and moving.
+        /// </summary>
+        /// <param name="row">Row to merge and move</param>
+        /// <param name="direction">Direction in which to merge and move the row</param>
         private void MoveHorizontal(int row, Direction direction)
         {
-            bool hasFirstTile = false;
-            if (direction == Direction.Right)
+            var hasFirstTile = false;
+            if (direction == Direction.Right)   //3,2,1,0
             {
-                for (int column = ColumnCount - 1; column >= 0; column--) //3,2,1,0
+                for (var column = ColumnCount - 1; column >= 0; column--)
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
 
                 hasFirstTile = false;
 
-                for (int column = ColumnCount - 1; column >= 0; column--) //3,2,1,0
+                for (var column = ColumnCount - 1; column >= 0; column--)
                 {
                     hasFirstTile = MoveRow(row, column, hasFirstTile);
                     if (this.hasMovedSomething)
@@ -262,14 +301,14 @@ namespace game1024Core.Core
                     this.hasMovedSomething = false;
                 }
             }
-            else
+            else    //0,1,2,3
             {
-                for (int column = 0; column < ColumnCount; column++) //0,1,2,3
+                for (var column = 0; column < ColumnCount; column++)
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
 
                 hasFirstTile = false;
 
-                for (int column = 0; column < ColumnCount; column++) //0,1,2,3
+                for (var column = 0; column < ColumnCount; column++)
                 {
                     hasFirstTile = MoveRow(row, column, hasFirstTile);
                     if (this.hasMovedSomething)
@@ -279,60 +318,47 @@ namespace game1024Core.Core
             }
         }
 
-
+        /// <summary>
+        /// Perform game move in specified direction.
+        /// </summary>
+        /// <param name="direction">Direction of the move</param>
         public void Move(Direction direction)
         {
             this.DidSomething = false;
             if (!IsMovePossible())
                 return;
-
-            int startingRow = 0, startingColumn = 0;
-
+            
             switch (direction)
             {
                 case Direction.Up:
-                    startingRow = 0;
-                    startingColumn = 0;
-
-                    for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
+                    for (var column = 0; column < ColumnCount; column++)
                         MoveVertical(column, Direction.Up);
-
                     break;
                 case Direction.Down:
-                    startingRow = RowCount;
-                    startingColumn = 0;
-
-                    for (int column = startingColumn; column < ColumnCount; column++) //0,1,2,3
+                    for (var column = 0; column < ColumnCount; column++)
                         MoveVertical(column, Direction.Down);
-
                     break;
                 case Direction.Left:
-                    startingRow = 0;
-                    startingColumn = 0;
-
-                    for (int row = startingRow; row < RowCount; row++)
+                    for (var row = 0; row < RowCount; row++)
                         MoveHorizontal(row, Direction.Left);
-
                     break;
-                case Direction.Right:
-                    startingRow = 0;
-                    startingColumn = ColumnCount;
-
-                    for (int row = startingRow; row < RowCount; row++)
+                default:
+                    for (var row = 0; row < RowCount; row++)
                         MoveHorizontal(row, Direction.Right);
-
                     break;
             }
         }
 
-
-        /* Traverse the field and look for tiles that exist and their value is equal to 1024 */
+        /// <summary>
+        /// Traverse the field and look for tiles which value is equal to 1024.
+        /// </summary>
+        /// <returns>True if found, false otherwise</returns>
         public bool isSolved()
         {
-            for (int i = 0; i < RowCount; i++)
-            for (int j = 0; j < ColumnCount; j++)
-                if (tiles[i, j] != null && tiles[i, j].Value == 1024)
-                    return true;
+            for (var i = 0; i < RowCount; i++)
+                for (var j = 0; j < ColumnCount; j++)
+                    if (tiles[i, j] != null && tiles[i, j].Value == 1024)
+                        return true;
 
             return false;
         }

@@ -9,18 +9,7 @@ namespace game1024Console
         {
             var game = new Game(4);
             var ui = new ConsoleUI(game);
-            ui.Play();
-            /*
-            ui.PrintField();
-
-            Console.WriteLine("\n");
-            game.Update(Direction.Left);
-            ui.PrintField();
-            
-            Console.WriteLine("\n");
-            game.Update(Direction.Up);
-            ui.PrintField();*/
-
+            ui.Run();
         }
     }
 }

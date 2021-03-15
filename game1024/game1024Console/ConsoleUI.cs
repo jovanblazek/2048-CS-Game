@@ -16,27 +16,28 @@ namespace game1024Console
             field = game.GetField();
         }
 
-        public void Play()
+        /// <summary>
+        /// Main game loop. 
+        /// </summary>
+        public void Run()
         {
             do
             {
-                PrintField();
+                Print();
                 ProcessInput();
             } while (game.GameState == GameState.Playing);
 
+            Print();
             if (game.GameState == GameState.Won)
-            {
-                PrintField();
                 Console.WriteLine("Congratulations, you won!");
-            }
             else
-            {
-                PrintField();
                 Console.WriteLine("GAME OVER!");
-            }
         }
 
-        public void PrintField()
+        /// <summary>
+        /// Prints the game field
+        /// </summary>
+        public void Print()
         {
             Console.WriteLine("Score: {0}", field.Score);
             Console.WriteLine();
@@ -48,20 +49,24 @@ namespace game1024Console
                     if (field.GetTile(row, column) != null)
                     {
                         CalculateTileColor(field.GetTile(row, column).Value);
-                        Console.Write("{0,3}", field.GetTile(row, column).Value);
+                        Console.Write("{0,3} ", field.GetTile(row, column).Value);
 
                         Console.BackgroundColor = ConsoleColor.Black;
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
-                        Console.Write("{0,3}", "x");
+                        Console.Write("{0,3} ", "x");
                 }
 
                 Console.WriteLine();
             }
         }
 
-        private void CalculateTileColor(int value)
+        /// <summary>
+        /// Set background and foreground color of console based on tile value
+        /// </summary>
+        /// <param name="value">Value of tile</param>
+        private static void CalculateTileColor(int value)
         {
             switch (value)
             {
@@ -106,6 +111,9 @@ namespace game1024Console
             }
         }
 
+        /// <summary>
+        /// Process player input and update the game accordingly.
+        /// </summary>
         private void ProcessInput()
         {
             ConsoleKeyInfo move = Console.ReadKey(); ;

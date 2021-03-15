@@ -20,6 +20,10 @@ namespace game1024Core.Core
             GameState = GameState.Playing;
         }
 
+        /// <summary>
+        /// Updates the game based on player input and checks if the game has been won/lost.
+        /// </summary>
+        /// <param name="direction">Direction of player move</param>
         public void Update(Direction direction)
         {
             field.Move(direction);
@@ -28,16 +32,9 @@ namespace game1024Core.Core
                 field.CreateNewTile();
 
             if (field.isSolved())
-            {
                 GameState = GameState.Won;
-                return;
-            }
             else if (!field.IsMovePossible())
-            {
                 GameState = GameState.Lost;
-                return;
-            }
-            
         }
 
         public Field GetField()
