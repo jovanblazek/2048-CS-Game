@@ -31,7 +31,7 @@ namespace game1024Core.Core
             if (field.DidSomething)
                 field.CreateNewTile();
 
-            if (field.isSolved())
+            if (field.IsSolved())
                 GameState = GameState.Won;
             else if (!field.IsMovePossible())
                 GameState = GameState.Lost;

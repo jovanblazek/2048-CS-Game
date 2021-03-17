@@ -353,7 +353,7 @@ namespace game1024Core.Core
         /// Traverse the field and look for tiles which value is equal to 1024.
         /// </summary>
         /// <returns>True if found, false otherwise</returns>
-        public bool isSolved()
+        public bool IsSolved()
         {
             for (var i = 0; i < RowCount; i++)
                 for (var j = 0; j < ColumnCount; j++)
