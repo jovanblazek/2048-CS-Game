@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using game1024Core.Core;
+using game1024Core.Entities;
+using game1024Core.Services;
 
 namespace game1024Console
 {
@@ -9,11 +9,14 @@ namespace game1024Console
     {
         private Game game;
         private Field field;
+        private readonly IScoreService _scoreService = new ScoreServiceFile();
 
         public ConsoleUI(Game game)
         {
             this.game = game;
             field = game.GetField();
+            game.OnFieldChange += Print;
+            game.OnGameStateChange += PrintGameEnd;
         }
 
         /// <summary>
@@ -21,17 +24,14 @@ namespace game1024Console
         /// </summary>
         public void Run()
         {
+            Print();
             do
             {
-                Print();
                 ProcessInput();
             } while (game.GameState == GameState.Playing);
 
-            Print();
-            if (game.GameState == GameState.Won)
-                Console.WriteLine("Congratulations, you won!");
-            else
-                Console.WriteLine("GAME OVER!");
+            _scoreService.AddScore(new Score
+                {Player = Environment.UserName, Points = field.Score, PlayedAt = DateTime.Now});
         }
 
         /// <summary>
@@ -39,6 +39,7 @@ namespace game1024Console
         /// </summary>
         public void Print()
         {
+            Console.Clear();
             Console.WriteLine("Score: {0}", field.Score);
             Console.WriteLine();
 
@@ -116,8 +117,7 @@ namespace game1024Console
         /// </summary>
         private void ProcessInput()
         {
-            ConsoleKeyInfo move = Console.ReadKey(); ;
-            Console.Clear();
+            ConsoleKeyInfo move = Console.ReadKey();
 
             if (move.Key == ConsoleKey.UpArrow)
                 game.Update(Direction.Up);
@@ -127,6 +127,35 @@ namespace game1024Console
                 game.Update(Direction.Left);
             else if (move.Key == ConsoleKey.RightArrow)
                 game.Update(Direction.Right);
+        }
+
+        /// <summary>
+        /// Prints summary at the end of the game
+        /// </summary>
+        private void PrintGameEnd()
+        {
+            Print();
+            if (game.GameState == GameState.Won)
+                Console.WriteLine("\nCongratulations, you won!\n");
+            else
+                Console.WriteLine("\nGAME OVER!\n");
+            PrintTopScores();
+        }
+
+        /// <summary>
+        /// Prints top 3 scores
+        /// </summary>
+        private void PrintTopScores()
+        {
+            Console.WriteLine("----------------------");
+            Console.WriteLine("----- TOP SCORES -----");
+            Console.WriteLine("----------------------");
+            foreach (var score in _scoreService.GetTopScores())
+            {
+                Console.WriteLine("{0} {1,5}", score.Player.PadRight(10), score.Points);
+            }
+
+            Console.WriteLine("----------------------");
         }
     }
 }

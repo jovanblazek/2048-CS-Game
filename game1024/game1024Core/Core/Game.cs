@@ -1,18 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace game1024Core.Core
+﻿namespace game1024Core.Core
 {
     public enum GameState
     {
-        Playing, Won, Lost
+        Playing,
+        Won,
+        Lost
     }
+
+    public delegate void OnFieldChange();
+
+    public delegate void OnGameStateChange();
 
     public class Game
     {
+        public event OnFieldChange OnFieldChange;
+        public event OnGameStateChange OnGameStateChange;
         private Field field;
-        public GameState GameState { get; private set; }
+
+        private GameState _gameState;
+
+        public GameState GameState
+        {
+            get => _gameState;
+            private set
+            {
+                _gameState = value;
+                OnGameStateChange?.Invoke();
+            }
+        }
 
         public Game(int gridSize)
         {
@@ -30,6 +45,9 @@ namespace game1024Core.Core
 
             if (field.DidSomething)
                 field.CreateNewTile();
+
+            if (field.DidSomething && OnFieldChange != null)
+                OnFieldChange();
 
             if (field.IsSolved())
                 GameState = GameState.Won;

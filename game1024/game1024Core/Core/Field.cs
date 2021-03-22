@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace game1024Core.Core
 {
@@ -75,9 +73,9 @@ namespace game1024Core.Core
         private bool HasEmptyTile()
         {
             for (var i = 0; i < RowCount; i++)
-                for (var j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j] == null)
-                        return true;
+            for (var j = 0; j < ColumnCount; j++)
+                if (tiles[i, j] == null)
+                    return true;
 
             return false;
         }
@@ -93,15 +91,15 @@ namespace game1024Core.Core
 
             //check tile to the right
             for (var i = 0; i < RowCount; i++)
-                for (var j = 0; j < ColumnCount - 1; j++)
-                    if (tiles[i, j].Value == tiles[i, j + 1].Value)
-                        return true;
+            for (var j = 0; j < ColumnCount - 1; j++)
+                if (tiles[i, j].Value == tiles[i, j + 1].Value)
+                    return true;
 
             //check tile below
             for (var i = 0; i < RowCount - 1; i++)
-                for (var j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j].Value == tiles[i + 1, j].Value)
-                        return true;
+            for (var j = 0; j < ColumnCount; j++)
+                if (tiles[i, j].Value == tiles[i + 1, j].Value)
+                    return true;
 
             return false;
         }
@@ -180,7 +178,7 @@ namespace game1024Core.Core
         private void MoveVertical(int column, Direction direction)
         {
             var hasFirstTile = false;
-            if (direction == Direction.Down)    //3,2,1,0
+            if (direction == Direction.Down) //3,2,1,0
             {
                 for (var row = RowCount - 1; row >= 0; row--)
                     hasFirstTile = MergeColumn(row, column, hasFirstTile);
@@ -195,7 +193,7 @@ namespace game1024Core.Core
                     this.hasMovedSomething = false;
                 }
             }
-            else    //0,1,2,3
+            else //0,1,2,3
             {
                 for (var row = 0; row < RowCount; row++)
                     hasFirstTile = MergeColumn(row, column, hasFirstTile);
@@ -286,7 +284,7 @@ namespace game1024Core.Core
         private void MoveHorizontal(int row, Direction direction)
         {
             var hasFirstTile = false;
-            if (direction == Direction.Right)   //3,2,1,0
+            if (direction == Direction.Right) //3,2,1,0
             {
                 for (var column = ColumnCount - 1; column >= 0; column--)
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
@@ -301,7 +299,7 @@ namespace game1024Core.Core
                     this.hasMovedSomething = false;
                 }
             }
-            else    //0,1,2,3
+            else //0,1,2,3
             {
                 for (var column = 0; column < ColumnCount; column++)
                     hasFirstTile = MergeRow(row, column, hasFirstTile);
@@ -327,7 +325,7 @@ namespace game1024Core.Core
             this.DidSomething = false;
             if (!IsMovePossible())
                 return;
-            
+
             switch (direction)
             {
                 case Direction.Up:
@@ -356,9 +354,9 @@ namespace game1024Core.Core
         public bool IsSolved()
         {
             for (var i = 0; i < RowCount; i++)
-                for (var j = 0; j < ColumnCount; j++)
-                    if (tiles[i, j] != null && tiles[i, j].Value == 1024)
-                        return true;
+            for (var j = 0; j < ColumnCount; j++)
+                if (tiles[i, j] != null && tiles[i, j].Value == 1024)
+                    return true;
 
             return false;
         }

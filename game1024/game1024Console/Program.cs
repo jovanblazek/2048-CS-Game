@@ -1,5 +1,4 @@
-﻿using System;
-using game1024Core.Core;
+﻿using game1024Core.Core;
 
 namespace game1024Console
 {
