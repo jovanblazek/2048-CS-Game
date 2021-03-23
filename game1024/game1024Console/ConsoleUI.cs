@@ -10,6 +10,8 @@ namespace game1024Console
         private Game game;
         private Field field;
         private readonly IScoreService _scoreService = new ScoreServiceFile();
+        private readonly ICommentService _commentService = new CommentServiceFile();
+        private readonly IRatingService _ratingService = new RatingServiceFile();
 
         public ConsoleUI(Game game)
         {
@@ -30,8 +32,20 @@ namespace game1024Console
                 ProcessInput();
             } while (game.GameState == GameState.Playing);
 
-            _scoreService.AddScore(new Score
-                {Player = Environment.UserName, Points = field.Score, PlayedAt = DateTime.Now});
+            _scoreService.AddScore(new Score {Player = Environment.UserName, Points = field.Score, PlayedAt = DateTime.Now});
+
+            Console.WriteLine("Did you enjoy playing? Leave us feedback: ");
+            var comment = Console.ReadLine();
+            if (comment != null && comment.Trim().Length > 0)
+                _commentService.AddComment(new Comment { Player = Environment.UserName, Text = comment, SubmittedAt = DateTime.Now });
+
+            var rating = -1;
+            do
+            {
+                Console.WriteLine("Rate the game! (0 - 10)");
+                rating = int.Parse(Console.ReadLine());
+            } while (rating == null || rating < 0 || rating > 10);
+            _ratingService.AddRating(new Rating{ Player = Environment.UserName, Value = rating, SubmittedAt = DateTime.Now });
         }
 
         /// <summary>
@@ -140,6 +154,8 @@ namespace game1024Console
             else
                 Console.WriteLine("\nGAME OVER!\n");
             PrintTopScores();
+            PrintLatestComments();
+            PrintGameRating();
         }
 
         /// <summary>
@@ -155,6 +171,32 @@ namespace game1024Console
                 Console.WriteLine("{0} {1,5}", score.Player.PadRight(10), score.Points);
             }
 
+            Console.WriteLine("----------------------");
+        }
+
+        /// <summary>
+        /// Prints 3 latest comments
+        /// </summary>
+        private void PrintLatestComments()
+        {
+            Console.WriteLine("-- LATEST COMMENTS ---");
+            Console.WriteLine("----------------------");
+            if(_commentService.GetLatestComments().Count == 0)
+                Console.WriteLine("No comments :(");
+
+            foreach (var comment in _commentService.GetLatestComments())
+                Console.WriteLine("{2}.{3}.{4} - {0} {1,5}", comment.Player.PadRight(10), comment.Text, comment.SubmittedAt.Day, comment.SubmittedAt.Month, comment.SubmittedAt.Year);
+
+            Console.WriteLine("----------------------");
+        }
+
+        /// <summary>
+        /// Prints average game rating
+        /// </summary>
+        private void PrintGameRating()
+        {
+            Console.WriteLine("----------------------");
+            Console.WriteLine("-- GAME RATING: {0} ---", _ratingService.GetFinalRating());
             Console.WriteLine("----------------------");
         }
     }

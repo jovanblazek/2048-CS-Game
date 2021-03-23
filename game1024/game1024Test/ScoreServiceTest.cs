@@ -9,7 +9,7 @@ namespace game1024Test
     public class ScoreServiceTest
     {
         [TestMethod]
-        public void CreateServiceTest()
+        public void ACreateServiceTest()
         {
             var service = CreateService();
             Assert.AreEqual(0, service.GetTopScores().Count);
