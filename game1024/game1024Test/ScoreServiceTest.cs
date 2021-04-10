@@ -19,6 +19,7 @@ namespace game1024Test
         public void AddScoreTestSingle()
         {
             var service = CreateService();
+            service.ResetScore();
             service.AddScore(new Score{Player = "Jovan", Points = 100, PlayedAt = DateTime.Now});
 
             Assert.AreEqual(1, service.GetTopScores().Count);
@@ -29,6 +30,7 @@ namespace game1024Test
         public void AddScoreTestMultiple()
         {
             var service = CreateService();
+            service.ResetScore();
             service.AddScore(new Score { Player = "Jovan", Points = 100, PlayedAt = DateTime.Now });
             service.AddScore(new Score { Player = "Jano", Points = 200, PlayedAt = DateTime.Now });
             service.AddScore(new Score { Player = "Jozo", Points = 50, PlayedAt = DateTime.Now });
@@ -58,7 +60,7 @@ namespace game1024Test
 
         private IScoreService CreateService()
         {
-            return new ScoreServiceFile();
+            return new ScoreServiceEF();
         }
     }
 }

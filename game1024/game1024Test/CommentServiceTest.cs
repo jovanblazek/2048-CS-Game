@@ -61,7 +61,7 @@ namespace game1024Test
 
         private ICommentService CreateService()
         {
-            return new CommentServiceFile();
+            return new CommentServiceEF();
         }
     }
 }

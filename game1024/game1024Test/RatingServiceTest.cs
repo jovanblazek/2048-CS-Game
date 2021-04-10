@@ -21,6 +21,7 @@ namespace game1024Test
         public void AddRatingTest()
         {
             var service = CreateService();
+            service.ResetRatings();
             service.AddRating(new Rating { Player = "Jovan", Value = 7, SubmittedAt = DateTime.Now });
 
             Assert.AreEqual(1, service.GetLatestRatings().Count);
@@ -34,6 +35,7 @@ namespace game1024Test
         public void AddMultipleRatingsTest()
         {
             var service = CreateService();
+            service.ResetRatings();
             service.AddRating(new Rating { Player = "Jovan", Value = 7, SubmittedAt = DateTime.Now });
             service.AddRating(new Rating { Player = "Jaro", Value = 8, SubmittedAt = DateTime.Now });
             service.AddRating(new Rating { Player = "Jozo", Value = 9, SubmittedAt = DateTime.Now });
@@ -54,6 +56,7 @@ namespace game1024Test
         public void GetFinalRatingTest()
         {
             var service = CreateService();
+            service.ResetRatings();
             service.AddRating(new Rating { Player = "Jovan", Value = 4, SubmittedAt = DateTime.Now });
             service.AddRating(new Rating { Player = "Jaro", Value = 5, SubmittedAt = DateTime.Now });
 
@@ -75,7 +78,7 @@ namespace game1024Test
 
         private IRatingService CreateService()
         {
-            return new RatingServiceFile();
+            return new RatingServiceEF();
         }
     }
 }
