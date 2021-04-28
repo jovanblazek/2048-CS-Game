@@ -1,5 +1,8 @@
-﻿namespace game1024Core.Core
+﻿using System;
+
+namespace game1024Core.Core
 {
+    [Serializable]
     public class Tile
     {
         public Tile(int value)

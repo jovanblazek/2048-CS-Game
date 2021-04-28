@@ -2,6 +2,7 @@
 
 namespace game1024Core.Core
 {
+    [Serializable]
     public enum Direction
     {
         Up,
@@ -10,6 +11,7 @@ namespace game1024Core.Core
         Right
     }
 
+    [Serializable]
     public class Field
     {
         private Tile[,] tiles;
@@ -19,7 +21,7 @@ namespace game1024Core.Core
         private bool hasMovedSomething = false;
         private int foundRow = 0;
         private int foundColumn = 0;
-        private Random rnd = new Random();
+        //private Random rnd = new Random();
 
         public int RowCount { get; }
         public int ColumnCount { get; }
@@ -58,11 +60,11 @@ namespace game1024Core.Core
             int row, column;
             do
             {
-                row = rnd.Next(0, RowCount);
-                column = rnd.Next(0, ColumnCount);
+                row = new Random().Next(0, RowCount);
+                column = new Random().Next(0, ColumnCount);
             } while (tiles[row, column] != null);
 
-            var value = (rnd.NextDouble() < 0.9) ? 1 : 2;
+            var value = (new Random().NextDouble() < 0.9) ? 1 : 2;
             tiles[row, column] = new Tile(value);
         }
 

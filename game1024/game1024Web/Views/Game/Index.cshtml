@@ -1,0 +1,47 @@
+﻿@using game1024Core.Core
+@model game1024Core.Core.Game
+@{
+    ViewData["Title"] = "Game";
+}
+
+<h1>Game 1024</h1>
+<div class="game-grid">
+    @for (var row = 0; row < Model.GetField().RowCount; row++)
+    {
+    <div class="game-row">
+        @for (var column = 0; column < Model.GetField().ColumnCount; column++)
+        {
+
+            var tile = Model.GetField().GetTile(row, column);
+            if (tile == null)
+            {
+                <div class="tile tile-empty"></div>
+            }
+            else
+            {
+                <div class="tile tile-full tile-@tile.Value">@tile.Value</div>
+            }
+
+        }
+    </div>
+    }
+</div>
+
+<script>
+    document.onkeydown = () => {
+        switch (window.event.keyCode) {
+        case 37:
+            window.location.href = "/Game/Move?dir=@Direction.Left"
+            break;
+        case 38:
+            window.location.href = "/Game/Move?dir=@Direction.Up"
+            break;
+        case 39:
+            window.location.href = "/Game/Move?dir=@Direction.Right"
+            break;
+        case 40:
+            window.location.href = "/Game/Move?dir=@Direction.Down"
+            break;
+        }
+    }
+</script>

@@ -1,4 +1,6 @@
-﻿namespace game1024Core.Core
+﻿using System;
+
+namespace game1024Core.Core
 {
     public enum GameState
     {
@@ -11,6 +13,7 @@
 
     public delegate void OnGameStateChange();
 
+    [Serializable]
     public class Game
     {
         public event OnFieldChange OnFieldChange;
