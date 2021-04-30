@@ -4,44 +4,77 @@
     ViewData["Title"] = "Game";
 }
 
-<h1>Game 1024</h1>
+<header>
+    <h1 class="game-name">1024</h1>
+    <div class="score">
+        <p class="score-title">Score</p>
+        <p class="score-value">@Model.GetField().Score</p>
+    </div>
+    <p>Move using arrow keys</p>
+    <a class="button-new" href="/Game/New">New Game</a>
+</header>
 <div class="game-grid">
+    @if (Model.GameState != GameState.Playing)
+    {
+        <div class="game-message">
+            <h2 class="message">
+                @if (Model.GameState == GameState.Won)
+                {
+                    <span>Game Won!</span>
+                }
+                else
+                {
+                    <span>Game Over!</span>
+                }
+            </h2>
+            <a class="button-new" href="/Game/New">New Game</a>
+        </div>
+    }
     @for (var row = 0; row < Model.GetField().RowCount; row++)
     {
-    <div class="game-row">
-        @for (var column = 0; column < Model.GetField().ColumnCount; column++)
-        {
-
-            var tile = Model.GetField().GetTile(row, column);
-            if (tile == null)
+        <div class="game-row">
+            @for (var column = 0; column < Model.GetField().ColumnCount; column++)
             {
-                <div class="tile tile-empty"></div>
-            }
-            else
-            {
-                <div class="tile tile-full tile-@tile.Value">@tile.Value</div>
-            }
 
-        }
-    </div>
+                var tile = Model.GetField().GetTile(row, column);
+                if (tile == null)
+                {
+                    <div class="tile tile-empty"></div>
+                }
+                else
+                {
+                    <div class="tile tile-full tile-@tile.Value">@tile.Value</div>
+                }
+
+            }
+        </div>
     }
 </div>
 
-<script>
-    document.onkeydown = () => {
-        switch (window.event.keyCode) {
-        case 37:
-            window.location.href = "/Game/Move?dir=@Direction.Left"
-            break;
-        case 38:
-            window.location.href = "/Game/Move?dir=@Direction.Up"
-            break;
-        case 39:
-            window.location.href = "/Game/Move?dir=@Direction.Right"
-            break;
-        case 40:
-            window.location.href = "/Game/Move?dir=@Direction.Down"
-            break;
+@if (Model.GameState != GameState.Won)
+{
+    <script>
+        document.onkeydown = () => {
+            switch (window.event.keyCode) {
+            case 37:
+                window.location.href = "/Game/Move?dir=@Direction.Left"
+                break;
+            case 38:
+                window.location.href = "/Game/Move?dir=@Direction.Up"
+                break;
+            case 39:
+                window.location.href = "/Game/Move?dir=@Direction.Right"
+                break;
+            case 40:
+                window.location.href = "/Game/Move?dir=@Direction.Down"
+                break;
+            }
         }
-    }
-</script>
+    </script>
+}
+else
+{
+    <script>
+        document.onkeydown = null;
+    </script>
+}

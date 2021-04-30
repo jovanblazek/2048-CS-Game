@@ -1,40 +1,11 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
+﻿a.navbar-brand {
 	white-space: normal;
 	text-align: center;
 	word-break: break-all;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-	color: #0366d6;
-}
-
-.btn-primary {
-	color: #fff;
-	background-color: #1b6ec2;
-	border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-	color: #fff;
-	background-color: #1b6ec2;
-	border-color: #1861ac;
-}
-
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
-	font-size: 14px;
-}
-@media (min-width: 768px) {
-	html {
-		font-size: 16px;
-	}
-}
 
 .border-top {
 	border-top: 1px solid #e5e5e5;
@@ -63,12 +34,96 @@ body {
 	/* Margin bottom by footer height */
 	margin-bottom: 60px;
 }
+
+p {
+	margin: 0;
+}
+
 .footer {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 	white-space: nowrap;
 	line-height: 60px; /* Vertically center the text there */
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+main header {
+	display: grid;
+	grid-template-columns: 1fr max-content;
+	align-items: center;
+	width: 475px;
+	margin: 0 auto 1rem auto;
+}
+
+.score {
+	background-color: #bbada0;
+	padding: 10px 20px;
+	font-size: 25px;
+	font-weight: bold;
+	border-radius: 3px;
+	color: white;
+	text-align: center;
+}
+
+.score-title {
+	color: #eee4da;
+	font-size: 13px;
+	text-transform: uppercase;
+}
+
+.game-name {
+	font-size: 80px;
+	line-height: 80px;
+	font-weight: bold;
+	color: #776e65;
+}
+
+.button-new {
+	color: white;
+	background-color: #8f7a66;
+	padding: 8px 20px;
+	border-radius: 3px;
+	font-weight: bold;
+	height: max-content;
+}
+
+.button-new:hover {
+	color: white;
+	text-decoration: none;
+}
+
+.game-message {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+
+	background-color: rgba(238, 228, 218, 0.73);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+
+	opacity: 0;
+	animation: fade-in 0.4s forwards;
+}
+
+.message {
+	font-weight: bold;
+	color: #776e65;
+	margin-bottom: 1rem;
 }
 
 .game-grid {
@@ -78,7 +133,9 @@ body {
 	border-radius: 3px;
 	padding: 15px;
 	width: max-content;
-}	
+	margin: 0 auto;
+	position: relative;
+}
 
 .game-row {
 	display: flex;
@@ -95,7 +152,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	padding: 10px;
-	background-color: rgba(238,228,218,.35);
+	background-color: rgba(238, 228, 218, 0.35);
 	font-weight: bold;
 	margin-right: 15px;
 	height: 100px;
@@ -156,4 +213,29 @@ body {
 
 .tile-512 {
 	background-color: #edc53f;
+}
+
+@media (max-width: 500px) {
+	.game-name {
+		font-size: 60px;
+	}
+
+	main header {
+		width: 100%;
+	}
+
+	.game-grid {
+		padding: 8px;
+	}
+
+	.game-row {
+		margin-bottom: 8px;
+	}
+
+	.tile {
+		width: 60px;
+		height: 60px;
+		font-size: 2rem;
+		margin-right: 8px;
+	}
 }

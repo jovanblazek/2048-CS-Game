@@ -8,6 +8,8 @@ namespace Microsoft.AspNetCore.Http
     {
         public static object GetObject(this ISession session, string key)
         {
+            if (session.Get(key) == null)
+                return null;
             BinaryFormatter bf = new BinaryFormatter();
             MemoryStream stream = new MemoryStream(session.Get(key));
             return bf.Deserialize(stream);
