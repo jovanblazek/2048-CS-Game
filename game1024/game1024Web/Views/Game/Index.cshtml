@@ -8,7 +8,13 @@
     <h1 class="game-name">1024</h1>
     <div class="score">
         <p class="score-title">Score</p>
-        <p class="score-value">@Model.GetField().Score</p>
+        <p class="score-value">
+            @Model.GetField().Score
+            @if (@Model.GainedScore > 0)
+            {
+                <span class="score-gained">+@Model.GainedScore</span>
+            }
+        </p>
     </div>
     <p>Move using arrow keys</p>
     <a class="button-new" href="/Game/New">New Game</a>
@@ -27,6 +33,11 @@
                     <span>Game Over!</span>
                 }
             </h2>
+            <form action="/Game/SaveScore" method="post" class="game-end-form">
+                <input type="number" name="points" value="@Model.GetField().Score" hidden />
+                <input type="text" name="player" placeholder="Name" required maxlength="20" />
+                <button type="submit" class="button-new">Submit</button>
+            </form>
             <a class="button-new" href="/Game/New">New Game</a>
         </div>
     }
@@ -40,6 +51,14 @@
                 if (tile == null)
                 {
                     <div class="tile tile-empty"></div>
+                }
+                else if (tile.IsNew)
+                {
+                    <div class="tile tile-full tile-@tile.Value tile-new">@tile.Value</div>
+                }
+                else if (tile.IsMerged)
+                {
+                    <div class="tile tile-full tile-@tile.Value tile-merged">@tile.Value</div>
                 }
                 else
                 {

@@ -76,3 +76,4 @@ F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Web\bin\Debug\
 F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Web\bin\Debug\netcoreapp3.1\game1024Core.dll
 F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Web\bin\Debug\netcoreapp3.1\game1024Core.pdb
 F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Web\obj\Debug\netcoreapp3.1\Razor\Views\Game\Index.cshtml.g.cs
+F:\plocha\Random\TUKE\LS 21\NET\dotnet-1024-game\game1024\game1024Web\obj\Debug\netcoreapp3.1\Razor\Views\Leaderboard\Index.cshtml.g.cs

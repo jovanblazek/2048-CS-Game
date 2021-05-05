@@ -21,7 +21,6 @@ namespace game1024Core.Core
         private bool hasMovedSomething = false;
         private int foundRow = 0;
         private int foundColumn = 0;
-        //private Random rnd = new Random();
 
         public int RowCount { get; }
         public int ColumnCount { get; }
@@ -65,7 +64,7 @@ namespace game1024Core.Core
             } while (tiles[row, column] != null);
 
             var value = (new Random().NextDouble() < 0.9) ? 1 : 2;
-            tiles[row, column] = new Tile(value);
+            tiles[row, column] = new Tile(value, true);
         }
 
         /// <summary>
@@ -130,6 +129,7 @@ namespace game1024Core.Core
                 if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
                 {
                     tiles[this.foundRow, this.foundColumn].Value *= 2;
+                    tiles[this.foundRow, this.foundColumn].IsMerged = true;
                     tiles[row, column] = null;
                     Score += tiles[this.foundRow, this.foundColumn].Value;
                     hasFirstTile = false;
@@ -162,7 +162,7 @@ namespace game1024Core.Core
             }
             else if (hasFirstTile && tiles[row, column] != null)
             {
-                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value);
+                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value, false, tiles[row, column].IsMerged);
                 tiles[row, column] = null;
                 this.hasMovedSomething = true;
                 hasFirstTile = false;
@@ -235,6 +235,7 @@ namespace game1024Core.Core
                 if (tiles[row, column].Value == tiles[this.foundRow, this.foundColumn].Value)
                 {
                     tiles[this.foundRow, this.foundColumn].Value *= 2;
+                    tiles[this.foundRow, this.foundColumn].IsMerged = true;
                     tiles[row, column] = null;
                     Score += tiles[this.foundRow, this.foundColumn].Value;
                     hasFirstTile = false;
@@ -268,7 +269,7 @@ namespace game1024Core.Core
             }
             else if (hasFirstTile && tiles[row, column] != null)
             {
-                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value);
+                tiles[this.foundRow, this.foundColumn] = new Tile(tiles[row, column].Value, false, tiles[row, column].IsMerged);
                 tiles[row, column] = null;
                 this.hasMovedSomething = true;
                 hasFirstTile = false;
@@ -357,10 +358,31 @@ namespace game1024Core.Core
         {
             for (var i = 0; i < RowCount; i++)
             for (var j = 0; j < ColumnCount; j++)
-                if (tiles[i, j] != null && tiles[i, j].Value == 1024)
-                    return true;
+                if (tiles[i, j] != null && tiles[i, j].Value == 16)
+                        return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Sets boolean values, used for animations, on tiles to false. Called before every update.
+        /// </summary>
+        public void ClearTileAnimations()
+        {
+            for (var i = 0; i < RowCount; i++)
+            {
+                for (var j = 0; j < ColumnCount; j++)
+                {
+                    if (tiles[i, j] != null)
+                    {
+                        if (tiles[i, j].IsMerged) 
+                            tiles[i, j].IsMerged = false;
+                        if (tiles[i, j].IsNew)
+                            tiles[i, j].IsNew = false;
+                    }
+                }
+            }
+
         }
     }
 }

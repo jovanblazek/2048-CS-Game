@@ -56,6 +56,40 @@ p {
 	}
 }
 
+@keyframes appear {
+	0% {
+		opacity: 0;
+		transform: scale(0);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes pop {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes move-up {
+	0% {
+		top: 0;
+		opacity: 1;
+	}
+	100% {
+		top: -50px;
+		opacity: 0;
+	}
+}
+
 main header {
 	display: grid;
 	grid-template-columns: 1fr max-content;
@@ -80,6 +114,19 @@ main header {
 	text-transform: uppercase;
 }
 
+.score-value {
+	position: relative;
+}
+
+.score-gained {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	color: #776e65;
+	animation: move-up 0.6s ease-in forwards;
+}
+
 .game-name {
 	font-size: 80px;
 	line-height: 80px;
@@ -91,14 +138,23 @@ main header {
 	color: white;
 	background-color: #8f7a66;
 	padding: 8px 20px;
+	margin: 0 auto;
 	border-radius: 3px;
 	font-weight: bold;
 	height: max-content;
+	width: max-content;
+	outline: none;
+	border: none;
 }
 
 .button-new:hover {
 	color: white;
 	text-decoration: none;
+}
+
+.button-new:focus, .button-new:focus-within {
+	border: none;
+	outline: none;
 }
 
 .game-message {
@@ -110,6 +166,7 @@ main header {
 	z-index: 100;
 
 	background-color: rgba(238, 228, 218, 0.73);
+	border-radius: 3px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -124,6 +181,23 @@ main header {
 	font-weight: bold;
 	color: #776e65;
 	margin-bottom: 1rem;
+}
+
+.game-end-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.game-end-form input {
+	background-color: rgba(238, 228, 218);
+	border: 1px solid #8f7a66;
+	border-radius: 3px;
+	padding: 5px 10px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #776e65;
 }
 
 .game-grid {
@@ -171,6 +245,16 @@ main header {
 
 .tile-empty {
 	background-color: rgba(238, 228, 218, 0.35);
+}
+
+.tile-new {
+	animation: appear 0.2s forwards ease 0.1s;
+	animation-fill-mode: backwards;
+}
+
+.tile-merged {
+	animation: pop 0.2s ease 0.1s;
+	animation-fill-mode: backwards;
 }
 
 .tile-1 {
