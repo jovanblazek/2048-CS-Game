@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using game1024Core.Entities;
 using game1024Core.Services;
 using game1024Web.Models;
 
@@ -18,6 +19,20 @@ namespace game1024Web.Controllers
         public IActionResult Index()
         {
             return View("Index", CreateModel());
+        }
+
+        public IActionResult AddComment(Comment comment)
+        {
+            comment.SubmittedAt = DateTime.Now;
+            _commentService.AddComment(comment);
+            return View("Index", CreateModel()); ;
+        }
+
+        public IActionResult AddRating(Rating rating)
+        {
+            rating.SubmittedAt = DateTime.Now;
+            _ratingService.AddRating(rating);
+            return View("Index", CreateModel()); ;
         }
 
         private LeaderboardModel CreateModel()

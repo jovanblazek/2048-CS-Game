@@ -190,7 +190,7 @@ main header {
 	margin-bottom: 1rem;
 }
 
-.game-end-form input {
+.game-end-form input, .game-end-form textarea {
 	background-color: rgba(238, 228, 218);
 	border: 1px solid #8f7a66;
 	border-radius: 3px;
@@ -299,9 +299,56 @@ main header {
 	background-color: #edc53f;
 }
 
+.leaderboard-heading {
+	font-size: 80px;
+	line-height: 80px;
+	font-weight: bold;
+	color: #776e65;
+}
+
+.card {
+	background-color: rgba(238, 228, 218, 0.5);
+	padding: 1rem 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.card h2 {
+    font-weight: bold;
+    color: #776e65;
+}
+
+.card ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.card ol {
+	padding-left: 1.5rem;
+}
+
+.comment-item {
+	margin: 1rem 0 1.5rem 0;
+}
+
+.score-item, .rating-item {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	grid-gap: 0 10px;
+	max-width: 300px;
+}
+
+.score-item > div:last-child, .rating-item > div:last-child
+{
+	text-align: right;
+}
+
 @media (max-width: 500px) {
 	.game-name {
 		font-size: 60px;
+	}
+
+	.leaderboard-heading {
+		font-size: 3.5rem;
 	}
 
 	main header {

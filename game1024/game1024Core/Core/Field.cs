@@ -358,7 +358,7 @@ namespace game1024Core.Core
         {
             for (var i = 0; i < RowCount; i++)
             for (var j = 0; j < ColumnCount; j++)
-                if (tiles[i, j] != null && tiles[i, j].Value == 16)
+                if (tiles[i, j] != null && tiles[i, j].Value == 1024)
                         return true;
 
             return false;

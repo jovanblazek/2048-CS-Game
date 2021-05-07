@@ -70,7 +70,7 @@
     }
 </div>
 
-@if (Model.GameState != GameState.Won)
+@if (Model.GameState == GameState.Playing)
 {
     <script>
         document.onkeydown = () => {

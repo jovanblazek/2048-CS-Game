@@ -56,11 +56,13 @@ namespace game1024Core.Core
                 GainedScore = field.Score - previousScore;
                 if (field.IsSolved())
                     GameState = GameState.Won;
-                else if (!field.IsMovePossible())
-                    GameState = GameState.Lost;
-
-                field.CreateNewTile();
-
+                else
+                {
+                    field.CreateNewTile();
+                    if (!field.IsMovePossible())
+                        GameState = GameState.Lost;
+                }
+                
                 if (OnFieldChange != null)
                     OnFieldChange();
             }
